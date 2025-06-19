@@ -13,7 +13,7 @@ const Footer = () => {
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
                 <TrendingUp className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold">PortfolioOptimizer</span>
+              <span className="text-xl font-bold">Sami-Portfolio-Optimizer</span>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               Enhance your investment strategy with our advanced portfolio optimization tools 
@@ -22,15 +22,15 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-gray-300">
                 <Mail className="h-4 w-4" />
-                <span>info@portfoliooptimizer.com</span>
+                <span>mazarimohamedsami@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-300">
                 <Phone className="h-4 w-4" />
-                <span>+1 (555) 123-4567</span>
+                <span>+33 780 824 078 </span>
               </div>
               <div className="flex items-center space-x-2 text-gray-300">
                 <MapPin className="h-4 w-4" />
-                <span>New York, NY</span>
+                <span>Paris, France</span>
               </div>
             </div>
           </div>
@@ -49,7 +49,7 @@ const Footer = () => {
                 How It Works
               </Link>
               <Link to="/contact" className="block text-gray-300 hover:text-white transition-colors">
-                Contact Us
+                Contact Me
               </Link>
             </div>
           </div>
@@ -77,7 +77,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-300 text-sm">
-              © 2024 PortfolioOptimizer. All rights reserved.
+              © 2024 PortfolioOptimizer. All rights reserved to Mohamed Sami Mazari.
             </p>
             <p className="text-gray-300 text-sm mt-2 md:mt-0">
               Built with Modern Portfolio Theory
