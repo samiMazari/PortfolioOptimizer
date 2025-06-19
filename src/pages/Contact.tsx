@@ -206,7 +206,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-medium">Email</p>
-                    <p className="text-gray-600">info@portfoliooptimizer.com</p>
+                    <p className="text-gray-600">mazarimohamedsami@gmail.com</p>
                   </div>
                 </div>
 
@@ -216,7 +216,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-medium">Phone</p>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
+                    <p className="text-gray-600">+33 780 824 078</p>
                   </div>
                 </div>
 
@@ -226,13 +226,14 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-medium">Office</p>
-                    <p className="text-gray-600">New York, NY</p>
+                    <p className="text-gray-600">Paris, France</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Business Hours */}
+            {/*
             <Card>
               <CardHeader>
                 <CardTitle>Business Hours</CardTitle>
@@ -255,7 +256,7 @@ const Contact = () => {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </div> */}
 
         {/* FAQ Section */}
         <section className="mt-20">
