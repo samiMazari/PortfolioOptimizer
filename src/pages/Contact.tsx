@@ -233,7 +233,6 @@ const Contact = () => {
             </Card>
 
             {/* Business Hours */}
-            {/*
             <Card>
               <CardHeader>
                 <CardTitle>Business Hours</CardTitle>
@@ -256,7 +255,7 @@ const Contact = () => {
               </CardContent>
             </Card>
           </div>
-        </div> */}
+        </div> 
 
         {/* FAQ Section */}
         <section className="mt-20">
