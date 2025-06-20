@@ -13,7 +13,7 @@ const Footer = () => {
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
                 <TrendingUp className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold">Sami-Portfolio-Optimizer</span>
+              <span className="text-xl font-bold">PortfolioOptimizer</span>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               Enhance your investment strategy with our advanced portfolio optimization tools 
@@ -77,7 +77,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-300 text-sm">
-              © 2024 PortfolioOptimizer. All rights reserved to Mohamed Sami Mazari.
+              © 2024 PortfolioOptimizer. All rights reserved to Mohamed Sami Mazari .
             </p>
             <p className="text-gray-300 text-sm mt-2 md:mt-0">
               Mohamed Sami Mazari
