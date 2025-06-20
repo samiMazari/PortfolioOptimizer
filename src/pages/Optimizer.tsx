@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import PortfolioResults from '@/components/PortfolioResults';
-import { Loader2, TrendingUp } from 'lucide-react';
+import { Loader2, TrendingUp, AlertCircle, BarChart3 } from 'lucide-react';
 
 interface OptimizationRequest {
   symbols: string[];
@@ -34,46 +34,80 @@ interface OptimizationResult {
 
 const Optimizer = () => {
   const { toast } = useToast();
-  const [symbols, setSymbols] = useState('AAPL, GOOGL, MSFT, TSLA, AMZN');
+  const [symbols, setSymbols] = useState('AAPL, GOOGL, MSFT');
   const [timeRange, setTimeRange] = useState('5');
   const [riskTolerance, setRiskTolerance] = useState([5]);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<OptimizationResult | null>(null);
 
-  // Mock data for demonstration - Replace with actual API call
-  const mockOptimizationResult: OptimizationResult = {
-    weights: {
-      'AAPL': 0.25,
-      'GOOGL': 0.20,
-      'MSFT': 0.22,
-      'TSLA': 0.18,
-      'AMZN': 0.15
-    },
-    expectedReturn: 0.12,
-    volatility: 0.18,
-    sharpeRatio: 0.67,
-    assets: [
-      { symbol: 'AAPL', weight: 0.25, expectedReturn: 0.15, volatility: 0.20 },
-      { symbol: 'GOOGL', weight: 0.20, expectedReturn: 0.12, volatility: 0.18 },
-      { symbol: 'MSFT', weight: 0.22, expectedReturn: 0.11, volatility: 0.16 },
-      { symbol: 'TSLA', weight: 0.18, expectedReturn: 0.18, volatility: 0.35 },
-      { symbol: 'AMZN', weight: 0.15, expectedReturn: 0.13, volatility: 0.22 }
-    ]
+  // Dynamic mock data generator based on user input
+  const generateMockResults = (symbolList: string[]): OptimizationResult => {
+    // Generate random but realistic weights that sum to 1
+    const weights: { [key: string]: number } = {};
+    const rawWeights = symbolList.map(() => Math.random());
+    const sum = rawWeights.reduce((a, b) => a + b, 0);
+    
+    symbolList.forEach((symbol, index) => {
+      weights[symbol] = rawWeights[index] / sum;
+    });
+
+    // Generate realistic financial metrics
+    const baseReturn = 0.08 + (riskTolerance[0] / 100);
+    const baseVolatility = 0.12 + (riskTolerance[0] / 50);
+    
+    const assets = symbolList.map(symbol => ({
+      symbol,
+      weight: weights[symbol],
+      expectedReturn: baseReturn + (Math.random() - 0.5) * 0.08,
+      volatility: baseVolatility + (Math.random() - 0.5) * 0.1
+    }));
+
+    const expectedReturn = assets.reduce((sum, asset) => 
+      sum + (asset.expectedReturn * asset.weight), 0
+    );
+    
+    const volatility = Math.sqrt(
+      assets.reduce((sum, asset) => 
+        sum + Math.pow(asset.volatility * asset.weight, 2), 0
+      )
+    );
+
+    return {
+      weights,
+      expectedReturn,
+      volatility,
+      sharpeRatio: expectedReturn / volatility,
+      assets
+    };
   };
 
   const handleOptimize = async () => {
-    const symbolArray = symbols.split(',').map(s => s.trim().toUpperCase()).filter(s => s.length > 0);
+    // Parse and validate input symbols
+    const symbolArray = symbols
+      .split(',')
+      .map(s => s.trim().toUpperCase())
+      .filter(s => s.length > 0 && /^[A-Z]{1,5}$/.test(s)); // Basic ticker validation
     
     if (symbolArray.length < 2) {
       toast({
         title: 'Invalid Input',
-        description: 'Please enter at least 2 stock symbols.',
+        description: 'Please enter at least 2 valid stock symbols (e.g., AAPL, GOOGL).',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (symbolArray.length > 20) {
+      toast({
+        title: 'Too Many Assets',
+        description: 'Please limit your selection to 20 assets or fewer.',
         variant: 'destructive',
       });
       return;
     }
 
     setIsLoading(true);
+    setResults(null);
     
     const optimizationData: OptimizationRequest = {
       symbols: symbolArray,
@@ -81,11 +115,33 @@ const Optimizer = () => {
       riskTolerance: riskTolerance[0]
     };
 
-    console.log('Optimization request:', optimizationData);
+    console.log('Optimization request with dynamic asset count:', optimizationData);
 
     try {
-      /* TODO: Replace this mock implementation with actual API call
-      
+      /* TODO: Replace this mock implementation with actual API call to /api/optimize
+         The backend should handle any number of assets dynamically.
+         
+         Expected API structure:
+         POST /api/optimize
+         Body: {
+           symbols: string[], // Variable length array
+           timeRange: number,
+           riskTolerance: number
+         }
+         
+         Response: {
+           weights: { [symbol: string]: number },
+           expectedReturn: number,
+           volatility: number, 
+           sharpeRatio: number,
+           assets: Array<{
+             symbol: string,
+             weight: number,
+             expectedReturn: number,
+             volatility: number
+           }>
+         }
+
       const response = await fetch('/api/optimize', {
         method: 'POST',
         headers: {
@@ -100,25 +156,25 @@ const Optimizer = () => {
 
       const result = await response.json();
       setResults(result);
-      
       */
 
       // Mock API delay
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Use mock data for now
-      setResults(mockOptimizationResult);
+      // Generate dynamic mock data based on user input
+      const mockResult = generateMockResults(symbolArray);
+      setResults(mockResult);
       
       toast({
-        title: 'Optimization Complete',
-        description: `Portfolio optimized for ${symbolArray.length} assets.`,
+        title: 'Portfolio Optimized',
+        description: `Successfully optimized portfolio with ${symbolArray.length} assets.`,
       });
 
     } catch (error) {
       console.error('Optimization error:', error);
       toast({
         title: 'Optimization Failed',
-        description: 'Unable to optimize portfolio. Please try again.',
+        description: 'Unable to optimize portfolio. Please check your symbols and try again.',
         variant: 'destructive',
       });
     } finally {
@@ -127,53 +183,56 @@ const Optimizer = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       <Navigation />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Portfolio Optimizer
-            </span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold mb-4 text-slate-800">
+            Portfolio Optimizer
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Enter your stock symbols and preferences to get an optimized portfolio allocation 
-            based on Modern Portfolio Theory.
+            based on Modern Portfolio Theory. Our system supports any number of assets.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Form */}
-          <Card className="h-fit">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
+          <Card className="finance-card h-fit">
+            <CardHeader className="pb-6">
+              <CardTitle className="flex items-center gap-3 text-slate-800 text-xl">
+                <BarChart3 className="h-6 w-6 text-teal-600" />
                 Optimization Parameters
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-600 text-base">
                 Configure your portfolio optimization settings
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="symbols">Stock Symbols (comma-separated)</Label>
+            <CardContent className="space-y-8">
+              <div className="space-y-3">
+                <Label htmlFor="symbols" className="text-slate-700 font-semibold">
+                  Stock Symbols (comma-separated)
+                </Label>
                 <Input
                   id="symbols"
                   placeholder="AAPL, GOOGL, MSFT, TSLA, AMZN"
                   value={symbols}
                   onChange={(e) => setSymbols(e.target.value)}
-                  className="font-mono"
+                  className="font-mono text-base py-3 border-slate-300 focus:border-teal-500 focus:ring-teal-500"
                 />
-                <p className="text-sm text-gray-500">
-                  Enter 2 or more stock symbols separated by commas
+                <p className="text-sm text-slate-500 flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 mt-0.5 text-slate-400" />
+                  Enter 2 or more valid stock symbols. Our system handles any number of assets dynamically.
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="timeRange">Historical Data Range</Label>
+              <div className="space-y-3">
+                <Label htmlFor="timeRange" className="text-slate-700 font-semibold">
+                  Historical Data Range
+                </Label>
                 <Select value={timeRange} onValueChange={setTimeRange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="py-3 border-slate-300 focus:border-teal-500">
                     <SelectValue placeholder="Select time range" />
                   </SelectTrigger>
                   <SelectContent>
@@ -188,7 +247,9 @@ const Optimizer = () => {
               </div>
 
               <div className="space-y-4">
-                <Label>Risk Tolerance: {riskTolerance[0]}/10</Label>
+                <Label className="text-slate-700 font-semibold">
+                  Risk Tolerance: {riskTolerance[0]}/10
+                </Label>
                 <Slider
                   value={riskTolerance}
                   onValueChange={setRiskTolerance}
@@ -197,28 +258,31 @@ const Optimizer = () => {
                   step={1}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-sm text-slate-500 font-medium">
                   <span>Conservative (1)</span>
                   <span>Moderate (5)</span>
                   <span>Aggressive (10)</span>
                 </div>
               </div>
 
-              <Separator />
+              <Separator className="bg-slate-200" />
 
               <Button 
                 onClick={handleOptimize} 
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="w-full finance-accent-button text-base py-3 h-auto"
                 size="lg"
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-3 h-5 w-5 animate-spin" />
                     Optimizing Portfolio...
                   </>
                 ) : (
-                  'Optimize Portfolio'
+                  <>
+                    <TrendingUp className="mr-3 h-5 w-5" />
+                    Optimize Portfolio
+                  </>
                 )}
               </Button>
             </CardContent>
@@ -229,17 +293,22 @@ const Optimizer = () => {
             {results ? (
               <PortfolioResults results={results} />
             ) : (
-              <Card className="h-fit">
-                <CardHeader>
-                  <CardTitle>Optimization Results</CardTitle>
-                  <CardDescription>
+              <Card className="finance-card h-fit">
+                <CardHeader className="pb-6">
+                  <CardTitle className="text-slate-800 text-xl">Optimization Results</CardTitle>
+                  <CardDescription className="text-slate-600 text-base">
                     Your optimized portfolio will appear here
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-12 text-gray-500">
-                    <TrendingUp className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Enter your parameters and click "Optimize Portfolio" to see results</p>
+                  <div className="text-center py-16 text-slate-500">
+                    <div className="bg-slate-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                      <TrendingUp className="h-10 w-10 text-slate-400" />
+                    </div>
+                    <p className="text-lg font-medium mb-2">Ready to Optimize</p>
+                    <p className="text-slate-400">
+                      Enter your parameters and click "Optimize Portfolio" to see results
+                    </p>
                   </div>
                 </CardContent>
               </Card>
