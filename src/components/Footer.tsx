@@ -58,10 +58,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Resources</h3>
             <div className="space-y-2">
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">
+              <a href="https://www.economist.com/topics/finance-and-economics" className="block text-gray-300 hover:text-white transition-colors">
                 Documentation
               </a>
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">
+              <a href="https://fr.finance.yahoo.com/" className="block text-gray-300 hover:text-white transition-colors">
                 API Reference
               </a>
               <a href="#" className="block text-gray-300 hover:text-white transition-colors">
@@ -80,7 +80,7 @@ const Footer = () => {
               © 2024 PortfolioOptimizer. All rights reserved to Mohamed Sami Mazari.
             </p>
             <p className="text-gray-300 text-sm mt-2 md:mt-0">
-              Built with Modern Portfolio Theory
+              Mohamed Sami Mazari
             </p>
           </div>
         </div>
