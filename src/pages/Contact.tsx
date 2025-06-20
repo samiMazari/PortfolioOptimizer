@@ -240,16 +240,16 @@ const Contact = () => {
               <CardContent>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span></span>
-                    <span className="text-gray-600"></span>
+                    <span>Monday - Friday</span>
+                    <span className="text-gray-600">9:00 AM - 6:00 PM EST</span>
                   </div>
                   <div className="flex justify-between">
-                    <span></span>
-                    <span className="text-gray-600"></span>
+                    <span>Saturday</span>
+                    <span className="text-gray-600">10:00 AM - 4:00 PM EST</span>
                   </div>
                   <div className="flex justify-between">
-                    <span></span>
-                    <span className="text-gray-600"></span>
+                    <span>Sunday</span>
+                    <span className="text-gray-600">Closed</span>
                   </div>
                 </div>
               </CardContent>
