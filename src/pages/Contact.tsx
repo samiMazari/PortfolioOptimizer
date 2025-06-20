@@ -235,7 +235,7 @@ const Contact = () => {
             {/* Business Hours */}
             <Card>
               <CardHeader>
-                <CardTitle></CardTitle>
+                <CardTitle>Business Hours</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
