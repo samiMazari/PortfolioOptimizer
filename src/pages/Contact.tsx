@@ -235,21 +235,21 @@ const Contact = () => {
             {/* Business Hours */}
             <Card>
               <CardHeader>
-                <CardTitle>Business Hours</CardTitle>
+                <CardTitle></CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>Monday - Friday</span>
-                    <span className="text-gray-600">9:00 AM - 6:00 PM EST</span>
+                    <span></span>
+                    <span className="text-gray-600"></span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Saturday</span>
-                    <span className="text-gray-600">10:00 AM - 4:00 PM EST</span>
+                    <span></span>
+                    <span className="text-gray-600"></span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Sunday</span>
-                    <span className="text-gray-600">Closed</span>
+                    <span></span>
+                    <span className="text-gray-600"></span>
                   </div>
                 </div>
               </CardContent>
